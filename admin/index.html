@@ -55,12 +55,12 @@ body{font-family:'Jost',sans-serif;background:#111009;color:#F9F6F0;min-height:1
 .gal-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
 .gal-item{position:relative;aspect-ratio:1;background:#1A1714;border:1px solid #2C2825;overflow:hidden;}
 .gal-item img{width:100%;height:100%;object-fit:cover;display:block;}
-.gal-item-ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;}
 .gal-overlay{position:absolute;inset:0;background:rgba(17,10,9,0);display:flex;align-items:center;justify-content:center;transition:background .3s;}
 .gal-item:hover .gal-overlay{background:rgba(17,10,9,.75);}
 .del-btn{padding:7px 16px;background:#C4788A;color:#fff;font-family:'Jost',sans-serif;font-size:9px;letter-spacing:.2em;text-transform:uppercase;border:none;cursor:pointer;opacity:0;transform:translateY(6px);transition:all .3s;}
 .gal-item:hover .del-btn{opacity:1;transform:translateY(0);}
 .gal-cap{position:absolute;bottom:0;left:0;right:0;background:rgba(17,10,9,.7);padding:6px 8px;font-size:10px;color:#E8D5B0;text-align:center;}
+.uploading{position:absolute;inset:0;background:rgba(17,10,9,.8);display:flex;align-items:center;justify-content:center;font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:#C9A96E;}
 .editor-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
 .editor-box{background:#1A1714;border:1px solid #2C2825;padding:24px;}
 .editor-head{font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:#C9A96E;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid #2C2825;}
@@ -90,6 +90,7 @@ body{font-family:'Jost',sans-serif;background:#111009;color:#F9F6F0;min-height:1
 </style>
 </head>
 <body>
+
 <div id="login">
   <div class="login-card">
     <div class="vstrip" style="margin-bottom:32px;">
@@ -108,6 +109,7 @@ body{font-family:'Jost',sans-serif;background:#111009;color:#F9F6F0;min-height:1
     <div class="login-err" id="loginErr">Kullanıcı adı veya şifre hatalı.</div>
   </div>
 </div>
+
 <div id="panel">
   <div class="layout">
     <aside class="sidebar">
@@ -142,13 +144,15 @@ body{font-family:'Jost',sans-serif;background:#111009;color:#F9F6F0;min-height:1
         <button class="sb-logout" onclick="doLogout()">Çıkış Yap</button>
       </div>
     </aside>
+
     <main class="main">
+
       <div class="tab on" id="tab-dashboard">
         <div class="page-head">
           <div><div class="page-title">Genel Bakış</div><div class="page-sub">Hoş geldiniz, Nuray Hanım</div></div>
         </div>
         <div class="stat-row">
-          <div class="stat-card"><div class="stat-n" id="galCount">6</div><div class="stat-l">Galeri Eseri</div></div>
+          <div class="stat-card"><div class="stat-n" id="galCount">0</div><div class="stat-l">Galeri Eseri</div></div>
           <div class="stat-card"><div class="stat-n" id="msgCount">3</div><div class="stat-l">Yeni Mesaj</div></div>
           <div class="stat-card"><div class="stat-n">12+</div><div class="stat-l">Yıl Deneyim</div></div>
           <div class="stat-card"><div class="stat-n">500+</div><div class="stat-l">Mezun Öğrenci</div></div>
@@ -162,9 +166,10 @@ body{font-family:'Jost',sans-serif;background:#111009;color:#F9F6F0;min-height:1
           </div>
         </div>
       </div>
+
       <div class="tab" id="tab-galeri">
         <div class="page-head">
-          <div><div class="page-title">Galeri Yönetimi</div><div class="page-sub">Fotoğraf ekle veya sil</div></div>
+          <div><div class="page-title">Galeri Yönetimi</div><div class="page-sub">Fotoğraf ekle veya sil — Cloudinary'e yüklenir</div></div>
           <button class="btn" onclick="document.getElementById('fileInput').click()">+ Fotoğraf Ekle</button>
         </div>
         <div class="upload-area" id="dropZone" onclick="document.getElementById('fileInput').click()">
@@ -174,33 +179,12 @@ body{font-family:'Jost',sans-serif;background:#111009;color:#F9F6F0;min-height:1
             </svg>
           </div>
           <div class="upload-txt">Fotoğrafları buraya sürükleyin veya tıklayın</div>
-          <div class="upload-sub">JPG, PNG — Maksimum 5MB</div>
+          <div class="upload-sub">JPG, PNG — Cloudinary'e yüklenir, kalıcı olarak saklanır</div>
         </div>
         <input type="file" id="fileInput" multiple accept="image/*" onchange="addFiles(this.files)"/>
-        <div class="gal-grid" id="galGrid">
-          <div class="gal-item" id="g1">
-            <div class="gal-item-ph" style="background:linear-gradient(135deg,#6B8FA830,#C9A96E30)">
-              <svg width="36" height="36" viewBox="0 0 36 36" fill="none"><polygon points="18,2 34,10 34,26 18,34 2,26 2,10" stroke="#C9A96E" stroke-width="1"/><circle cx="18" cy="18" r="5" fill="#C9A96E" opacity=".4"/></svg>
-            </div>
-            <div class="gal-overlay"><button class="del-btn" onclick="delItem('g1')">Sil</button></div>
-            <div class="gal-cap">Rozet, 2024</div>
-          </div>
-          <div class="gal-item" id="g2">
-            <div class="gal-item-ph" style="background:linear-gradient(135deg,#4A9B8E30,#C4788A30)">
-              <svg width="36" height="36" viewBox="0 0 36 36" fill="none"><rect x="4" y="4" width="28" height="28" stroke="#C9A96E" stroke-width="1"/><line x1="18" y1="4" x2="18" y2="32" stroke="#C9A96E" stroke-width=".5"/><line x1="4" y1="18" x2="32" y2="18" stroke="#C9A96E" stroke-width=".5"/></svg>
-            </div>
-            <div class="gal-overlay"><button class="del-btn" onclick="delItem('g2')">Sil</button></div>
-            <div class="gal-cap">Panel, 2023</div>
-          </div>
-          <div class="gal-item" id="g3">
-            <div class="gal-item-ph" style="background:linear-gradient(135deg,#C4788A30,#8B6A3530)">
-              <svg width="36" height="36" viewBox="0 0 36 36" fill="none"><circle cx="18" cy="18" r="14" stroke="#C9A96E" stroke-width="1"/><circle cx="18" cy="18" r="7" stroke="#6B8FA8" stroke-width="1"/><circle cx="18" cy="18" r="3" fill="#C9A96E" opacity=".5"/></svg>
-            </div>
-            <div class="gal-overlay"><button class="del-btn" onclick="delItem('g3')">Sil</button></div>
-            <div class="gal-cap">Rozet Seri, 2024</div>
-          </div>
-        </div>
+        <div class="gal-grid" id="galGrid"></div>
       </div>
+
       <div class="tab" id="tab-metinler">
         <div class="page-head">
           <div><div class="page-title">Metin Düzenleyici</div><div class="page-sub">Site içeriklerini güncelle</div></div>
@@ -236,6 +220,7 @@ body{font-family:'Jost',sans-serif;background:#111009;color:#F9F6F0;min-height:1
           </div>
         </div>
       </div>
+
       <div class="tab" id="tab-mesajlar">
         <div class="page-head">
           <div><div class="page-title">Gelen Mesajlar</div><div class="page-sub">İletişim formundan gelen talepler</div></div>
@@ -258,7 +243,7 @@ body{font-family:'Jost',sans-serif;background:#111009;color:#F9F6F0;min-height:1
               <div class="msg-name">Mehmet Demir</div>
               <div class="msg-meta">3 Mayıs 2025, 14:15 · mdemir@firma.com</div>
               <div class="msg-konu">Kurumsal Proje</div>
-              <div class="msg-text">Restoranımız için özel vitray panel yaptırmak istiyoruz. Yaklaşık 3x2 metre boyutlarında bir çalışma. Fiyat teklifi alabilir miyiz?</div>
+              <div class="msg-text">Restoranımız için özel vitray panel yaptırmak istiyoruz. Yaklaşık 3x2 metre. Fiyat teklifi alabilir miyiz?</div>
             </div>
             <div class="msg-acts">
               <button class="msg-btn" onclick="readMsg('m2')">Okundu</button>
@@ -270,7 +255,7 @@ body{font-family:'Jost',sans-serif;background:#111009;color:#F9F6F0;min-height:1
               <div class="msg-name">Zeynep Arslan</div>
               <div class="msg-meta">2 Mayıs 2025, 09:45 · zeynep@hotmail.com</div>
               <div class="msg-konu">Özel Sipariş</div>
-              <div class="msg-text">Annem için doğum günü hediyesi olarak küçük bir vitray pencere yaptırmak istiyorum. Ne kadar sürer ve fiyatı nedir?</div>
+              <div class="msg-text">Annem için doğum günü hediyesi olarak küçük bir vitray pencere yaptırmak istiyorum. Fiyatı nedir?</div>
             </div>
             <div class="msg-acts">
               <button class="msg-btn" onclick="readMsg('m3')">Okundu</button>
@@ -279,22 +264,143 @@ body{font-family:'Jost',sans-serif;background:#111009;color:#F9F6F0;min-height:1
           </div>
         </div>
       </div>
+
     </main>
   </div>
 </div>
+
 <div class="toast" id="toast"></div>
+
 <script>
-const USER='nuray',PASS='vitray2025';
-function doLogin(){const u=document.getElementById('uname').value;const p=document.getElementById('upass').value;if(u===USER&&p===PASS){document.getElementById('login').style.display='none';document.getElementById('panel').style.display='block';}else{document.getElementById('loginErr').style.display='block';}}
-function doLogout(){document.getElementById('panel').style.display='none';document.getElementById('login').style.display='flex';document.getElementById('uname').value='';document.getElementById('upass').value='';}
-function goTab(name,el){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));document.querySelectorAll('.sb-item').forEach(i=>i.classList.remove('on'));document.getElementById('tab-'+name).classList.add('on');el.classList.add('on');}
-function goTabById(name){const items=document.querySelectorAll('.sb-item');const tabs=['dashboard','galeri','metinler','mesajlar'];goTab(name,items[tabs.indexOf(name)]);}
-function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
-function saveBtn(btn){btn.textContent='Kaydedildi ✓';btn.classList.add('saved');toast('Değişiklikler kaydedildi');setTimeout(()=>{btn.textContent='Kaydet';btn.classList.remove('saved');},3000);}
-function addFiles(files){Array.from(files).forEach(f=>{const r=new FileReader();r.onload=e=>{const id='g'+Date.now();const d=document.createElement('div');d.className='gal-item';d.id=id;d.innerHTML=`<img src="${e.target.result}" alt="${f.name}"/><div class="gal-overlay"><button class="del-btn" onclick="delItem('${id}')">Sil</button></div><div class="gal-cap">${f.name.replace(/\.[^.]+$/,'')}</div>`;document.getElementById('galGrid').appendChild(d);document.getElementById('galCount').textContent=document.getElementById('galGrid').children.length;toast('Fotoğraf eklendi');};r.readAsDataURL(f);});}
-function delItem(id){if(confirm('Bu fotoğrafı silmek istiyor musunuz?')){document.getElementById(id).remove();document.getElementById('galCount').textContent=document.getElementById('galGrid').children.length;toast('Fotoğraf silindi');}}
-function readMsg(id){document.getElementById(id).classList.remove('unread');const n=document.querySelectorAll('.msg-card.unread').length;document.getElementById('badge').textContent=n;document.getElementById('msgCount').textContent=n;if(n===0)document.getElementById('badge').style.display='none';toast('Mesaj okundu olarak işaretlendi');}
-function delMsg(id){if(confirm('Bu mesajı silmek istiyor musunuz?')){document.getElementById(id).remove();toast('Mesaj silindi');}}
+const CLOUD_NAME = 'doyscbdid';
+const UPLOAD_PRESET = 'vitray';
+const USER = 'nuray', PASS = 'vitray2025';
+
+// Cloudinary'den mevcut fotoğrafları çek
+async function loadGallery() {
+  try {
+    const res = await fetch(`https://res.cloudinary.com/${CLOUD_NAME}/image/list/galeri.json`);
+    const data = await res.json();
+    const grid = document.getElementById('galGrid');
+    grid.innerHTML = '';
+    data.resources.forEach(img => {
+      const url = `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/c_fill,w_400,h_400/${img.public_id}`;
+      addToGrid(img.public_id, url, img.public_id.split('/').pop());
+    });
+    document.getElementById('galCount').textContent = data.resources.length;
+  } catch(e) {
+    console.log('Galeri boş veya yüklenemedi');
+  }
+}
+
+function addToGrid(publicId, url, name) {
+  const id = 'g_' + publicId.replace(/[^a-zA-Z0-9]/g, '_');
+  const d = document.createElement('div');
+  d.className = 'gal-item'; d.id = id;
+  d.innerHTML = `<img src="${url}" alt="${name}"/>
+    <div class="gal-overlay"><button class="del-btn" onclick="delItem('${id}','${publicId}')">Sil</button></div>
+    <div class="gal-cap">${name}</div>`;
+  document.getElementById('galGrid').appendChild(d);
+  document.getElementById('galCount').textContent = document.getElementById('galGrid').children.length;
+}
+
+async function addFiles(files) {
+  for (const f of Array.from(files)) {
+    const id = 'tmp_' + Date.now();
+    const d = document.createElement('div');
+    d.className = 'gal-item'; d.id = id;
+    d.innerHTML = `<div class="uploading">Yükleniyor...</div>`;
+    document.getElementById('galGrid').appendChild(d);
+
+    const fd = new FormData();
+    fd.append('file', f);
+    fd.append('upload_preset', UPLOAD_PRESET);
+    fd.append('folder', 'galeri');
+
+    try {
+      const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, {method:'POST', body:fd});
+      const data = await res.json();
+      const url = `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/c_fill,w_400,h_400/${data.public_id}`;
+      d.innerHTML = `<img src="${url}" alt="${f.name}"/>
+        <div class="gal-overlay"><button class="del-btn" onclick="delItem('${id}','${data.public_id}')">Sil</button></div>
+        <div class="gal-cap">${f.name.replace(/\.[^.]+$/,'')}</div>`;
+      document.getElementById('galCount').textContent = document.getElementById('galGrid').children.length;
+      toast('Fotoğraf yüklendi ✓');
+    } catch(e) {
+      d.remove();
+      toast('Yükleme başarısız!');
+    }
+  }
+}
+
+function delItem(id, publicId) {
+  if(confirm('Bu fotoğrafı silmek istiyor musunuz?')) {
+    document.getElementById(id).remove();
+    document.getElementById('galCount').textContent = document.getElementById('galGrid').children.length;
+    toast('Fotoğraf silindi');
+  }
+}
+
+function doLogin() {
+  const u = document.getElementById('uname').value;
+  const p = document.getElementById('upass').value;
+  if(u===USER && p===PASS) {
+    document.getElementById('login').style.display='none';
+    document.getElementById('panel').style.display='block';
+    loadGallery();
+  } else {
+    document.getElementById('loginErr').style.display='block';
+  }
+}
+
+function doLogout() {
+  document.getElementById('panel').style.display='none';
+  document.getElementById('login').style.display='flex';
+  document.getElementById('uname').value='';
+  document.getElementById('upass').value='';
+}
+
+function goTab(name,el) {
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  document.querySelectorAll('.sb-item').forEach(i=>i.classList.remove('on'));
+  document.getElementById('tab-'+name).classList.add('on');
+  el.classList.add('on');
+}
+
+function goTabById(name) {
+  const items=document.querySelectorAll('.sb-item');
+  const tabs=['dashboard','galeri','metinler','mesajlar'];
+  goTab(name,items[tabs.indexOf(name)]);
+}
+
+function toast(msg) {
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3000);
+}
+
+function saveBtn(btn) {
+  btn.textContent='Kaydedildi ✓'; btn.classList.add('saved');
+  toast('Değişiklikler kaydedildi');
+  setTimeout(()=>{btn.textContent='Kaydet';btn.classList.remove('saved');},3000);
+}
+
+function readMsg(id) {
+  document.getElementById(id).classList.remove('unread');
+  const n=document.querySelectorAll('.msg-card.unread').length;
+  document.getElementById('badge').textContent=n;
+  document.getElementById('msgCount').textContent=n;
+  if(n===0)document.getElementById('badge').style.display='none';
+  toast('Mesaj okundu olarak işaretlendi');
+}
+
+function delMsg(id) {
+  if(confirm('Bu mesajı silmek istiyor musunuz?')) {
+    document.getElementById(id).remove();
+    toast('Mesaj silindi');
+  }
+}
+
 const dz=document.getElementById('dropZone');
 dz.addEventListener('dragover',e=>{e.preventDefault();dz.style.borderColor='#C9A96E';});
 dz.addEventListener('dragleave',()=>dz.style.borderColor='#3C3630');
