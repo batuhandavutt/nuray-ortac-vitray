@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Nuray Ortaç — Vitray Sanatçısı & Eğitimci</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --gold: #C9A96E;
+      --gold-light: #E8D5B0;
+      --gold-pale: #F5ECD8;
+      --gold-dark: #8B6A35;
+      --ink: #1A1714;
+      --ink-soft: #2C2825;
+      --warm-white: #F9F6F0;
+      --warm-mid: #EDE8DF;
+      --warm-dark: #E0D8CC;
+      --glass-blue: #6B8FA8;
+      --glass-rose: #C4788A;
+      --glass-teal: #4A9B8E;
+      --text-muted: #888074;
+      --text-light: #AAA09A;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Jost', sans-serif; background: var(--warm-white); color: var(--ink); overflow-x: hidden; }
+    * { cursor: none; }
+    .cursor { position: fixed; width: 8px; height: 8px; background: var(--gold); border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%,-50%); }
+    .cursor-ring { position: fixed; width: 32px; height: 32px; border: 1px solid var(--gold); border-radius: 50%; pointer-events: none; z-index: 9998; transform: translate(-50%,-50%); opacity: 0.5; }
+    .vitray-strip { display: flex; height: 5px; width: 100%; }
+    .vitray-strip span { flex: 1; }
+    nav { position: fixed; top: 3px; left: 0; right: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 20px 60px; background: rgba(249,246,240,0.93); backdrop-filter: blur(12px); border-bottom: 0.5px solid var(--gold-light); transition: padding 0.3s; }
+    nav.scrolled { padding: 14px 60px; }
+    .nav-logo { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 300; letter-spacing: 0.1em; color: var(--ink); text-decoration: none; }
+    .nav-logo span { color: var(--gold-dark); font-style: italic; }
+    .nav-links { display: flex; gap: 36px; list-style: none; }
+    .nav-links a { font-size: 10px; font-weight: 300; letter-spacing: 0.25em; text-transform: uppercase; color: var(--text-muted); text-decoration: none; transition: color 0.3s; position: relative; }
+    .nav-links a::after { content: ''; position: absolute; bottom: -4px; left: 0; right: 100%; height: 1px; background: var(--gold); transition: right 0.3s; }
+    .nav-links a:hover { color: var(--gold-dark); }
+    .nav-links a:hover::after { right: 0; }
+    .nav-burger { display: none; flex-direction: column; gap: 5px; }
+    .nav-burger span { width: 24px; height: 1px; background: var(--ink); display: block; transition: all 0.3s; }
+    #hero { min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; padding-top: 80px; overflow: hidden; }
+    .hero-left { display: flex; flex-direction: column; justify-content: center; padding: 80px 60px; position: relative; z-index: 2; }
+    .hero-tag { font-size: 9px; font-weight: 300; letter-spacing: 0.35em; text-transform: uppercase; color: var(--gold-dark); margin-bottom: 24px; opacity: 0; animation: fadeUp 0.8s 0.2s forwards; }
+    .hero-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(48px, 5.5vw, 78px); font-weight: 300; line-height: 1.05; color: var(--ink); margin-bottom: 12px; opacity: 0; animation: fadeUp 0.8s 0.4s forwards; }
+    .hero-title em { font-style: italic; color: var(--gold-dark); }
+    .hero-subtitle { font-size: 11px; font-weight: 200; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-light); margin-bottom: 40px; opacity: 0; animation: fadeUp 0.8s 0.6s forwards; }
+    .hero-desc { font-size: 15px; font-weight: 300; line-height: 1.9; color: var(--text-muted); max-width: 400px; margin-bottom: 48px; opacity: 0; animation: fadeUp 0.8s 0.8s forwards; }
+    .hero-ctas { display: flex; gap: 20px; align-items: center; opacity: 0; animation: fadeUp 0.8s 1s forwards; }
+    .btn-primary { padding: 14px 36px; background: var(--ink); color: var(--gold-light); font-size: 10px; font-weight: 300; letter-spacing: 0.25em; text-transform: uppercase; text-decoration: none; transition: background 0.3s; }
+    .btn-primary:hover { background: var(--gold-dark); }
+    .btn-secondary { font-size: 10px; font-weight: 300; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold-dark); text-decoration: none; border-bottom: 1px solid var(--gold-light); padding-bottom: 2px; }
+    .hero-right { position: relative; background: var(--warm-mid); overflow: hidden; }
+    .hero-right-inner { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
+    .hero-window { width: 360px; height: 460px; opacity: 0; animation: fadeIn 1.2s 0.6s forwards; }
+    .hero-window svg { width: 100%; height: 100%; filter: drop-shadow(0 20px 60px rgba(0,0,0,0.12)); }
+    .hero-scroll { position: absolute; bottom: 40px; left: 60px; display: flex; align-items: center; gap: 12px; opacity: 0; animation: fadeUp 0.8s 1.4s forwards; }
+    .hero-scroll-line { width: 40px; height: 1px; background: var(--gold-light); position: relative; overflow: hidden; }
+    .hero-scroll-line::after { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: var(--gold); animation: lineSlide 2s 1.8s infinite; }
+    @keyframes lineSlide { 0%{left:-100%} 100%{left:100%} }
+    .hero-scroll span { font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--text-light); }
+    .stats { display: grid; grid-template-columns: repeat(3,1fr); border-top: 0.5px solid var(--gold-light); border-bottom: 0.5px solid var(--gold-light); }
+    .stat { padding: 36px 48px; border-right: 0.5px solid var(--gold-light); text-align: center; }
+    .stat:last-child { border-right: none; }
+    .stat-num { font-family: 'Cormorant Garamond', serif; font-size: 48px; font-weight: 300; color: var(--gold-dark); line-height: 1; margin-bottom: 8px; }
+    .stat-label { font-size: 9px; font-weight: 300; letter-spacing: 0.25em; text-transform: uppercase; color: var(--text-light); }
+    .section-tag { font-size: 9px; font-weight: 300; letter-spacing: 0.35em; text-transform: uppercase; color: var(--gold); margin-bottom: 16px; display: flex; align-items: center; gap: 16px; }
+    .section-tag::before { content: ''; width: 30px; height: 1px; background: var(--gold-light); }
+    .section-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(32px,4vw,52px); font-weight: 300; line-height: 1.1; color: var(--ink); }
+    .section-title em { font-style: italic; color: var(--gold-dark); }
+    #hakkimda { padding: 120px 60px; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+    .about-text .section-title { margin-bottom: 32px; }
+    .about-text p { font-size: 15px; font-weight: 300; line-height: 1.9; color: var(--text-muted); margin-bottom: 20px; }
+    .about-visual { position: relative; }
+    .about-img-frame { width: 100%; aspect-ratio: 3/4; background: var(--warm-mid); overflow: hidden; }
+    .about-img-frame svg { width: 100%; height: 100%; }
+    .about-frame-border { position: absolute; top: 20px; left: 20px; right: -20px; bottom: -20px; border: 1px solid var(--gold-light); pointer-events: none; }
+    #hizmetler { padding: 120px 60px; background: var(--ink); }
+    #hizmetler .section-tag { color: var(--gold); }
+    #hizmetler .section-tag::before { background: var(--gold-dark); }
+    #hizmetler .section-title { color: var(--gold-light); }
+    .services-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: #2C2825; margin-top: 60px; }
+    .service-card { background: var(--ink-soft); padding: 48px 36px; position: relative; overflow: hidden; transition: background 0.4s; }
+    .service-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--gold), transparent); transform: translateX(-100%); transition: transform 0.6s; }
+    .service-card:hover { background: #1e1c18; }
+    .service-card:hover::before { transform: translateX(0); }
+    .service-num { font-family: 'Cormorant Garamond', serif; font-size: 56px; font-weight: 300; color: #2C2825; line-height: 1; margin-bottom: 24px; transition: color 0.3s; }
+    .service-card:hover .service-num { color: var(--gold-dark); }
+    .service-icon { width: 40px; height: 40px; margin-bottom: 20px; }
+    .service-name { font-size: 14px; font-weight: 400; letter-spacing: 0.08em; color: var(--gold-light); margin-bottom: 12px; }
+    .service-desc { font-size: 13px; font-weight: 300; line-height: 1.7; color: #665E58; }
+    .service-link { display: inline-block; margin-top: 24px; font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold); text-decoration: none; border-bottom: 1px solid var(--gold-dark); padding-bottom: 2px; opacity: 0; transform: translateY(8px); transition: opacity 0.3s, transform 0.3s; }
+    .service-card:hover .service-link { opacity: 1; transform: translateY(0); }
+    #galeri { padding: 120px 60px; }
+    .gallery-intro { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 60px; }
+    .gallery-filter { display: flex; gap: 24px; }
+    .filter-btn { font-size: 10px; font-weight: 300; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-light); background: none; border: none; padding: 0; transition: color 0.3s; border-bottom: 1px solid transparent; padding-bottom: 2px; }
+    .filter-btn.active, .filter-btn:hover { color: var(--gold-dark); border-bottom-color: var(--gold-light); }
+    .gallery-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 3px; }
+    .gallery-item { aspect-ratio: 1; position: relative; overflow: hidden; background: var(--warm-mid); }
+    .gallery-item svg { width: 100%; height: 100%; transition: transform 0.6s ease; }
+    .gallery-item:hover svg { transform: scale(1.05); }
+    .gallery-overlay { position: absolute; inset: 0; background: rgba(26,23,20,0); display: flex; align-items: center; justify-content: center; transition: background 0.4s; }
+    .gallery-item:hover .gallery-overlay { background: rgba(26,23,20,0.55); }
+    .gallery-overlay-text { font-family: 'Cormorant Garamond', serif; font-size: 14px; font-style: italic; color: var(--gold-light); opacity: 0; transform: translateY(10px); transition: opacity 0.4s, transform 0.4s; }
+    .gallery-item:hover .gallery-overlay-text { opacity: 1; transform: translateY(0); }
+    .gallery-item.large { grid-column: span 2; aspect-ratio: auto; }
+    .gallery-item.large svg { width: 100%; height: 100%; min-height: 300px; }
+    #iletisim { padding: 120px 60px; background: var(--warm-mid); display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
+    .contact-info .section-title { margin-bottom: 20px; }
+    .contact-desc { font-size: 14px; font-weight: 300; line-height: 1.9; color: var(--text-muted); max-width: 340px; }
+    .contact-detail { display: flex; flex-direction: column; gap: 24px; margin-top: 36px; }
+    .contact-item { display: flex; gap: 16px; align-items: flex-start; }
+    .contact-item-icon { width: 32px; height: 32px; border: 1px solid var(--gold-light); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .contact-item-icon svg { width: 14px; height: 14px; }
+    .contact-item-label { font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--text-light); margin-bottom: 4px; }
+    .contact-item-val { font-size: 13px; font-weight: 300; color: var(--ink); }
+    .contact-form { display: flex; flex-direction: column; gap: 18px; }
+    .form-group { display: flex; flex-direction: column; gap: 8px; }
+    .form-group label { font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--text-light); }
+    .form-group input, .form-group textarea, .form-group select { background: var(--warm-white); border: 0.5px solid var(--warm-dark); padding: 12px 14px; font-family: 'Jost', sans-serif; font-size: 14px; font-weight: 300; color: var(--ink); outline: none; transition: border-color 0.3s; appearance: none; }
+    .form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color: var(--gold); }
+    .form-group textarea { resize: vertical; min-height: 110px; }
+    .form-submit { padding: 15px 40px; background: var(--ink); color: var(--gold-light); font-family: 'Jost', sans-serif; font-size: 10px; font-weight: 300; letter-spacing: 0.3em; text-transform: uppercase; border: none; transition: background 0.3s; align-self: flex-start; }
+    .form-submit:hover { background: var(--gold-dark); }
+    footer { background: var(--ink); padding: 48px 60px; }
+    .footer-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; padding-bottom: 32px; border-bottom: 0.5px solid #2C2825; }
+    .footer-logo { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 300; color: var(--gold-light); letter-spacing: 0.08em; }
+    .footer-logo span { font-style: italic; color: var(--gold); }
+    .footer-social { display: flex; gap: 20px; }
+    .footer-social a { font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase; color: #555; text-decoration: none; transition: color 0.3s; }
+    .footer-social a:hover { color: var(--gold); }
+    .footer-bottom { display: flex; justify-content: space-between; align-items: center; }
+    .footer-copy { font-size: 11px; font-weight: 300; color: #444; letter-spacing: 0.1em; }
+    .footer-nav { display: flex; gap: 24px; }
+    .footer-nav a { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: #444; text-decoration: none; transition: color 0.3s; }
+    .footer-nav a:hover { color: var(--gold); }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+    .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    @media(max-width:900px){
+      nav{padding:16px 24px;} nav.scrolled{padding:12px 24px;}
+      .nav-links{display:none;} .nav-burger{display:flex;}
+      .nav-links.open{display:flex;flex-direction:column;position:fixed;inset:0;background:var(--warm-white);justify-content:center;align-items:center;gap:32px;z-index:99;}
+      .nav-links.open a{font-size:14px;}
+      #hero{grid-template-columns:1fr;} .hero-left{padding:100px 24px 48px;} .hero-right{height:300px;} .hero-window{width:220px;height:280px;}
+      .stats{grid-template-columns:1fr;} .stat{border-right:none;border-bottom:0.5px solid var(--gold-light);} .stat:last-child{border-bottom:none;}
+      #hakkimda,#iletisim{grid-template-columns:1fr;padding:80px 24px;gap:48px;}
+      #hizmetler{padding:80px 24px;} .services-grid{grid-template-columns:1fr;}
+      #galeri{padding:80px 24px;} .gallery-intro{flex-direction:column;align-items:flex-start;gap:24px;}
+      .gallery-grid{grid-template-columns:1fr 1fr;} .gallery-item.large{grid-column:span 1;aspect-ratio:1;}
+      footer{padding:40px 24px;} .footer-top,.footer-bottom{flex-direction:column;gap:20px;text-align:center;}
+      .hero-scroll{left:24px;}
+    }
+  </style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- VİTRAY STRIP TOP -->
+<div class="vitray-strip" style="position:fixed;top:0;left:0;right:0;z-index:200;height:3px;">
+  <span style="background:#6B8FA8"></span><span style="background:#4A9B8E"></span>
+  <span style="background:#C9A96E"></span><span style="background:#C4788A"></span>
+  <span style="background:#8B6A35"></span><span style="background:#6B8FA8"></span>
+  <span style="background:#4A9B8E"></span><span style="background:#C9A96E"></span>
+  <span style="background:#C4788A"></span><span style="background:#4A9B8E"></span>
+  <span style="background:#6B8FA8"></span><span style="background:#8B6A35"></span>
+</div>
+
+<nav id="navbar">
+  <a href="#hero" class="nav-logo">Nuray Ortaç <span>Vitray</span></a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#hakkimda">Hakkımda</a></li>
+    <li><a href="#hizmetler">Dersler</a></li>
+    <li><a href="#galeri">Galeri</a></li>
+    <li><a href="#iletisim">İletişim</a></li>
+  </ul>
+  <div class="nav-burger" id="burger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-left">
+    <div class="hero-tag">Vitray Sanatçısı & Eğitimci — İstanbul</div>
+    <h1 class="hero-title">Işığı <em>cam</em><br>üzerinde<br>yakalıyorum.</h1>
+    <p class="hero-subtitle">El Yapımı Vitray · Atölye Dersleri · Kurumsal Tasarım</p>
+    <p class="hero-desc">Renk, ışık ve geometrinin kesiştiği noktada; geleneksel vitray sanatını çağdaş bir anlatımla yorumluyorum. Her cam parçası, başka bir hikâye taşıyor.</p>
+    <div class="hero-ctas">
+      <a href="#galeri" class="btn-primary">Galeriyi İncele</a>
+      <a href="#iletisim" class="btn-secondary">İletişime Geçin</a>
+    </div>
+    <div class="hero-scroll">
+      <div class="hero-scroll-line"></div>
+      <span>Aşağı kaydır</span>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-right-inner">
+      <div class="hero-window">
+        <svg viewBox="0 0 360 460" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <clipPath id="wClip">
+              <path d="M180,10 L350,105 L350,460 L10,460 L10,105 Z"/>
+            </clipPath>
+          </defs>
+          <rect width="360" height="460" fill="#EDE8DF"/>
+          <g clip-path="url(#wClip)">
+            <polygon points="180,10 10,105 10,230 95,282 180,230" fill="#6B8FA8" opacity="0.28"/>
+            <polygon points="180,10 350,105 350,230 265,282 180,230" fill="#4A9B8E" opacity="0.22"/>
+            <polygon points="95,282 180,230 265,282 180,335" fill="#C9A96E" opacity="0.32"/>
+            <polygon points="10,230 95,282 180,335 95,400 10,355" fill="#C4788A" opacity="0.22"/>
+            <polygon points="350,230 265,282 180,335 265,400 350,355" fill="#8B6A35" opacity="0.22"/>
+            <polygon points="95,400 180,335 265,400 180,460 10,460 10,355" fill="#6B8FA8" opacity="0.15"/>
+            <polygon points="265,400 350,355 350,460 180,460" fill="#4A9B8E" opacity="0.15"/>
+            <line x1="180" y1="10" x2="180" y2="460" stroke="#C9A96E" stroke-width="1.5"/>
+            <line x1="10" y1="105" x2="350" y2="105" stroke="#C9A96E" stroke-width="1"/>
+            <line x1="10" y1="230" x2="350" y2="230" stroke="#C9A96E" stroke-width="1"/>
+            <line x1="10" y1="355" x2="350" y2="355" stroke="#C9A96E" stroke-width="1"/>
+            <line x1="10" y1="105" x2="180" y2="335" stroke="#6B8FA8" stroke-width="0.5"/>
+            <line x1="350" y1="105" x2="180" y2="335" stroke="#C4788A" stroke-width="0.5"/>
+            <circle cx="180" cy="230" r="32" fill="none" stroke="#C9A96E" stroke-width="1.5"/>
+            <circle cx="180" cy="230" r="18" fill="#C9A96E" opacity="0.22"/>
+            <circle cx="180" cy="230" r="7" fill="#C9A96E" opacity="0.55"/>
+            <circle cx="180" cy="10" r="5" fill="#C9A96E"/>
+            <circle cx="10" cy="105" r="4" fill="#C9A96E" opacity="0.6"/>
+            <circle cx="350" cy="105" r="4" fill="#C9A96E" opacity="0.6"/>
+          </g>
+          <path d="M180,10 L350,105 L350,460 L10,460 L10,105 Z" fill="none" stroke="#8B6A35" stroke-width="3"/>
+          <path d="M180,10 L350,105 L350,460 L10,460 L10,105 Z" fill="none" stroke="#C9A96E" stroke-width="0.8" stroke-dasharray="4,10"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STRIP -->
+<div class="vitray-strip">
+  <span style="background:#4A9B8E"></span><span style="background:#C4788A"></span>
+  <span style="background:#6B8FA8"></span><span style="background:#8B6A35"></span>
+  <span style="background:#C9A96E"></span><span style="background:#4A9B8E"></span>
+  <span style="background:#C4788A"></span><span style="background:#6B8FA8"></span>
+  <span style="background:#C9A96E"></span><span style="background:#8B6A35"></span>
+  <span style="background:#4A9B8E"></span><span style="background:#C4788A"></span>
+</div>
+
+<!-- STATS -->
+<div class="stats reveal">
+  <div class="stat"><div class="stat-num">12+</div><div class="stat-label">Yıllık Deneyim</div></div>
+  <div class="stat"><div class="stat-num">300+</div><div class="stat-label">Tamamlanan Eser</div></div>
+  <div class="stat"><div class="stat-num">500+</div><div class="stat-label">Mezun Öğrenci</div></div>
+</div>
+
+<!-- HAKKIMDA -->
+<section id="hakkimda">
+  <div class="about-text reveal">
+    <div class="section-tag">Hakkımda</div>
+    <h2 class="section-title" style="margin-bottom:28px">Camın içinde<br>bir <em>dünya</em> var.</h2>
+    <p>Vitray sanatıyla tanışmam bir tesadüf değildi. Işığın renkli cam parçalarından geçerken yarattığı o büyülü dönüşüm, beni yıllar önce bu sanata bağladı ve bir daha bırakmadı.</p>
+    <p>İstanbul'daki atölyemde hem kendi eserlerimi üretiyorum hem de bu sanatı öğrenmek isteyen herkese kapılarımı açıyorum. Geleneksel tekniklerden çağdaş yorumlara her ölçekte çalışıyorum.</p>
+    <p>Kurumsal projeler için özel çözümler üretiyorum; oteller, restoranlar ve mimari mekanlar için özgün vitray tasarımları yapıyorum.</p>
+  </div>
+  <div class="about-visual reveal" style="transition-delay:0.2s">
+    <div class="about-img-frame">
+      <svg viewBox="0 0 400 533" xmlns="http://www.w3.org/2000/svg">
+        <rect width="400" height="533" fill="#EDE8DF"/>
+        <rect x="40" y="40" width="320" height="453" fill="#E4DDD4"/>
+        <path d="M200,80 A90,90 0 0,1 290,170 L200,170 Z" fill="#6B8FA8" opacity="0.28"/>
+        <path d="M200,80 A90,90 0 0,0 110,170 L200,170 Z" fill="#C4788A" opacity="0.22"/>
+        <rect x="80" y="190" width="110" height="150" fill="#4A9B8E" opacity="0.18"/>
+        <rect x="210" y="190" width="110" height="150" fill="#C9A96E" opacity="0.22"/>
+        <rect x="80" y="360" width="240" height="100" fill="#8B6A35" opacity="0.18"/>
+        <line x1="200" y1="40" x2="200" y2="493" stroke="#C9A96E" stroke-width="1.2"/>
+        <line x1="40" y1="170" x2="360" y2="170" stroke="#C9A96E" stroke-width="0.8"/>
+        <line x1="40" y1="360" x2="360" y2="360" stroke="#C9A96E" stroke-width="0.8"/>
+        <line x1="40" y1="190" x2="360" y2="340" stroke="#6B8FA8" stroke-width="0.4"/>
+        <line x1="360" y1="190" x2="40" y2="340" stroke="#C4788A" stroke-width="0.4"/>
+        <circle cx="200" cy="265" r="42" fill="none" stroke="#C9A96E" stroke-width="1.3"/>
+        <circle cx="200" cy="265" r="25" fill="#C9A96E" opacity="0.18"/>
+        <circle cx="200" cy="265" r="10" fill="#C9A96E" opacity="0.42"/>
+        <rect x="40" y="40" width="320" height="453" fill="none" stroke="#8B6A35" stroke-width="2"/>
+        <rect x="48" y="48" width="304" height="437" fill="none" stroke="#C9A96E" stroke-width="0.5"/>
+        <text x="200" y="515" text-anchor="middle" font-family="Jost,sans-serif" font-size="9" fill="#C9A96E" letter-spacing="3" opacity="0.5">FOTOĞRAF BURAYA</text>
+      </svg>
+    </div>
+    <div class="about-frame-border"></div>
+  </div>
+</section>
+
+<!-- HİZMETLER -->
+<section id="hizmetler">
+  <div class="reveal">
+    <div class="section-tag">Hizmetler</div>
+    <h2 class="section-title">Neler <em>sunuyorum</em></h2>
+  </div>
+  <div class="services-grid">
+    <div class="service-card reveal">
+      <div class="service-num">01</div>
+      <svg class="service-icon" viewBox="0 0 40 40" fill="none">
+        <circle cx="20" cy="20" r="17" stroke="#C9A96E" stroke-width="0.8"/>
+        <circle cx="20" cy="20" r="9" stroke="#6B8FA8" stroke-width="0.8"/>
+        <line x1="20" y1="3" x2="20" y2="37" stroke="#C9A96E" stroke-width="0.5"/>
+        <line x1="3" y1="20" x2="37" y2="20" stroke="#C9A96E" stroke-width="0.5"/>
+        <circle cx="20" cy="20" r="3" fill="#C9A96E" opacity="0.6"/>
+      </svg>
+      <div class="service-name">Birebir Ders</div>
+      <div class="service-desc">Başlangıç seviyesinden ileri tekniklere, kendi hızınızda ilerleyebileceğiniz kişiselleştirilmiş atölye programları.</div>
+      <a href="#iletisim" class="service-link">Rezervasyon →</a>
+    </div>
+    <div class="service-card reveal" style="transition-delay:0.15s">
+      <div class="service-num">02</div>
+      <svg class="service-icon" viewBox="0 0 40 40" fill="none">
+        <polygon points="20,2 37,11 37,29 20,38 3,29 3,11" stroke="#C9A96E" stroke-width="0.8"/>
+        <polygon points="20,10 29,15 29,25 20,30 11,25 11,15" stroke="#4A9B8E" stroke-width="0.8"/>
+        <circle cx="20" cy="20" r="4" fill="#C9A96E" opacity="0.45"/>
+      </svg>
+      <div class="service-name">Kurumsal Çözümler</div>
+      <div class="service-desc">Oteller, restoranlar ve mimari mekanlar için tasarımdan üretime kadar tüm süreçleri kapsayan özel vitray projeleri.</div>
+      <a href="#iletisim" class="service-link">Proje Teklifi →</a>
+    </div>
+    <div class="service-card reveal" style="transition-delay:0.3s">
+      <div class="service-num">03</div>
+      <svg class="service-icon" viewBox="0 0 40 40" fill="none">
+        <rect x="4" y="4" width="32" height="32" stroke="#C9A96E" stroke-width="0.8"/>
+        <line x1="20" y1="4" x2="20" y2="36" stroke="#C4788A" stroke-width="0.5"/>
+        <line x1="4" y1="20" x2="36" y2="20" stroke="#6B8FA8" stroke-width="0.5"/>
+        <line x1="4" y1="4" x2="36" y2="36" stroke="#C9A96E" stroke-width="0.3"/>
+        <line x1="36" y1="4" x2="4" y2="36" stroke="#C9A96E" stroke-width="0.3"/>
+        <rect x="14" y="14" width="12" height="12" fill="#C9A96E" opacity="0.3"/>
+      </svg>
+      <div class="service-name">Özel Eser Siparişi</div>
+      <div class="service-desc">Eviniz veya sevdikleriniz için tamamen size özel tasarlanan, el yapımı vitray objeler ve paneller.</div>
+      <a href="#iletisim" class="service-link">Sipariş Ver →</a>
+    </div>
+  </div>
+</section>
+
+<!-- GALERİ -->
+<section id="galeri">
+  <div class="gallery-intro reveal">
+    <div>
+      <div class="section-tag">Galeri</div>
+      <h2 class="section-title">Seçkiden <em>kareler</em></h2>
+    </div>
+    <div class="gallery-filter">
+      <button class="filter-btn active">Tümü</button>
+      <button class="filter-btn">Paneller</button>
+      <button class="filter-btn">Objeler</button>
+      <button class="filter-btn">Kurumsal</button>
+    </div>
+  </div>
+  <div class="gallery-grid reveal" style="transition-delay:0.2s">
+    <div class="gallery-item large" style="aspect-ratio:2/1">
+      <svg viewBox="0 0 600 300" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" style="min-height:300px">
+        <rect width="600" height="300" fill="#D8D0C4"/>
+        <polygon points="0,0 200,150 0,300" fill="#6B8FA8" opacity="0.4"/>
+        <polygon points="200,0 400,0 300,150" fill="#C9A96E" opacity="0.35"/>
+        <polygon points="400,0 600,0 600,150 400,300" fill="#4A9B8E" opacity="0.3"/>
+        <polygon points="0,300 200,150 400,300" fill="#C4788A" opacity="0.3"/>
+        <polygon points="400,300 600,150 600,300" fill="#8B6A35" opacity="0.3"/>
+        <polygon points="200,150 400,0 600,150 400,300" fill="#C9A96E" opacity="0.18"/>
+        <line x1="0" y1="0" x2="600" y2="300" stroke="#C9A96E" stroke-width="1.2"/>
+        <line x1="600" y1="0" x2="0" y2="300" stroke="#C9A96E" stroke-width="1.2"/>
+        <line x1="0" y1="150" x2="600" y2="150" stroke="#C9A96E" stroke-width="1"/>
+        <line x1="300" y1="0" x2="300" y2="300" stroke="#C9A96E" stroke-width="1"/>
+        <circle cx="300" cy="150" r="42" fill="none" stroke="#C9A96E" stroke-width="1.5"/>
+        <circle cx="300" cy="150" r="22" fill="#C9A96E" opacity="0.28"/>
+        <circle cx="300" cy="150" r="8" fill="#C9A96E" opacity="0.55"/>
+      </svg>
+      <div class="gallery-overlay"><div class="gallery-overlay-text">Geometrik Panel, 2024</div></div>
+    </div>
+    <div class="gallery-item">
+      <svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+        <rect width="300" height="300" fill="#E2D9CC"/>
+        <path d="M150,20 A110,110 0 1,1 149.9,20Z" fill="none" stroke="#C9A96E" stroke-width="1.5"/>
+        <path d="M150,50 A80,80 0 1,1 149.9,50Z" fill="none" stroke="#6B8FA8" stroke-width="1"/>
+        <path d="M150,82 A48,48 0 1,1 149.9,82Z" fill="#C4788A" opacity="0.22"/>
+        <line x1="40" y1="150" x2="260" y2="150" stroke="#C9A96E" stroke-width="0.5"/>
+        <line x1="150" y1="40" x2="150" y2="260" stroke="#C9A96E" stroke-width="0.5"/>
+        <circle cx="150" cy="150" r="14" fill="#C9A96E" opacity="0.5"/>
+      </svg>
+      <div class="gallery-overlay"><div class="gallery-overlay-text">Rozet, 2024</div></div>
+    </div>
+    <div class="gallery-item">
+      <svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+        <rect width="300" height="300" fill="#DDD5C8"/>
+        <rect x="18" y="18" width="122" height="122" fill="#4A9B8E" opacity="0.28"/>
+        <rect x="160" y="18" width="122" height="122" fill="#C9A96E" opacity="0.28"/>
+        <rect x="18" y="160" width="122" height="122" fill="#C4788A" opacity="0.28"/>
+        <rect x="160" y="160" width="122" height="122" fill="#6B8FA8" opacity="0.28"/>
+        <line x1="150" y1="0" x2="150" y2="300" stroke="#C9A96E" stroke-width="2.5"/>
+        <line x1="0" y1="150" x2="300" y2="150" stroke="#C9A96E" stroke-width="2.5"/>
+        <circle cx="150" cy="150" r="13" fill="#C9A96E"/>
+      </svg>
+      <div class="gallery-overlay"><div class="gallery-overlay-text">Dört Mevsim, 2023</div></div>
+    </div>
+    <div class="gallery-item">
+      <svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+        <rect width="300" height="300" fill="#E8E0D2"/>
+        <polygon points="150,18 268,88 268,212 150,282 32,212 32,88" fill="none" stroke="#C9A96E" stroke-width="1.5"/>
+        <polygon points="150,48 238,100 238,200 150,252 62,200 62,100" fill="#8B6A35" opacity="0.14"/>
+        <polygon points="150,82 208,116 208,184 150,218 92,184 92,116" fill="#C9A96E" opacity="0.2"/>
+        <line x1="150" y1="18" x2="150" y2="282" stroke="#C9A96E" stroke-width="0.5"/>
+        <line x1="32" y1="88" x2="268" y2="212" stroke="#6B8FA8" stroke-width="0.5"/>
+        <line x1="268" y1="88" x2="32" y2="212" stroke="#C4788A" stroke-width="0.5"/>
+        <circle cx="150" cy="150" r="22" fill="#C9A96E" opacity="0.32"/>
+      </svg>
+      <div class="gallery-overlay"><div class="gallery-overlay-text">Altıgen Seri, 2023</div></div>
+    </div>
+    <div class="gallery-item">
+      <svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+        <rect width="300" height="300" fill="#E0D8CA"/>
+        <path d="M150,28 Q240,98 210,198 Q150,268 90,198 Q60,98 150,28Z" fill="#C4788A" opacity="0.2"/>
+        <path d="M150,58 Q220,118 196,196 Q150,248 104,196 Q80,118 150,58Z" fill="none" stroke="#6B8FA8" stroke-width="1"/>
+        <path d="M150,88 Q200,138 182,196 Q150,230 118,196 Q100,138 150,88Z" fill="#C9A96E" opacity="0.25"/>
+        <circle cx="150" cy="150" r="26" fill="none" stroke="#C9A96E" stroke-width="1.5"/>
+        <circle cx="150" cy="150" r="10" fill="#8B6A35" opacity="0.4"/>
+      </svg>
+      <div class="gallery-overlay"><div class="gallery-overlay-text">Organik Form, 2024</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- İLETİŞİM -->
+<section id="iletisim">
+  <div class="contact-info reveal">
+    <div class="section-tag">İletişim</div>
+    <h2 class="section-title" style="margin-bottom:16px">Birlikte bir şey<br><em>yaratalım.</em></h2>
+    <p class="contact-desc">Ders almak, özel sipariş vermek veya kurumsal proje teklifi için formu doldurun ya da doğrudan ulaşın.</p>
+    <div class="contact-detail">
+      <div class="contact-item">
+        <div class="contact-item-icon">
+          <svg viewBox="0 0 14 14" fill="none" stroke="#C9A96E" stroke-width="1">
+            <rect x="1" y="2" width="12" height="10" rx="1"/><path d="M1,3 L7,8 L13,3"/>
+          </svg>
+        </div>
+        <div>
+          <div class="contact-item-label">E-posta</div>
+          <div class="contact-item-val">info@vitraycamsanat.com</div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-item-icon">
+          <svg viewBox="0 0 14 14" fill="none" stroke="#C9A96E" stroke-width="1">
+            <rect x="3" y="1" width="8" height="12" rx="1"/>
+            <circle cx="7" cy="10" r="0.8" fill="#C9A96E"/>
+          </svg>
+        </div>
+        <div>
+          <div class="contact-item-label">Instagram</div>
+          <div class="contact-item-val">@vitraycamsanat_nurayortac</div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-item-icon">
+          <svg viewBox="0 0 14 14" fill="none" stroke="#C9A96E" stroke-width="1">
+            <path d="M7,1 C3.7,1 1,3.7 1,7 C1,8.4 1.5,9.6 2.2,10.6 L1.4,12.8 L3.8,12 C4.7,12.7 5.8,13.1 7,13.1 C10.3,13.1 13,10.4 13,7.1 C13,3.8 10.3,1 7,1Z"/>
+          </svg>
+        </div>
+        <div>
+          <div class="contact-item-label">WhatsApp</div>
+          <div class="contact-item-val">+90 5XX XXX XX XX</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="contact-form reveal" style="transition-delay:0.2s">
+    <div class="form-group">
+      <label>Adınız Soyadınız</label>
+      <input type="text" placeholder="Ad Soyad"/>
+    </div>
+    <div class="form-group">
+      <label>E-posta</label>
+      <input type="email" placeholder="mail@ornek.com"/>
+    </div>
+    <div class="form-group">
+      <label>Konu</label>
+      <select>
+        <option value="">Seçiniz...</option>
+        <option>Birebir Ders</option>
+        <option>Kurumsal Proje</option>
+        <option>Özel Sipariş</option>
+        <option>Diğer</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Mesajınız</label>
+      <textarea placeholder="Projeniz veya talebiniz hakkında bilgi verin..."></textarea>
+    </div>
+    <button class="form-submit" id="submitBtn">Gönder</button>
+  </div>
+</section>
+
+<!-- STRIP -->
+<div class="vitray-strip">
+  <span style="background:#C4788A"></span><span style="background:#6B8FA8"></span>
+  <span style="background:#4A9B8E"></span><span style="background:#C9A96E"></span>
+  <span style="background:#8B6A35"></span><span style="background:#C4788A"></span>
+  <span style="background:#6B8FA8"></span><span style="background:#C9A96E"></span>
+  <span style="background:#4A9B8E"></span><span style="background:#C4788A"></span>
+  <span style="background:#8B6A35"></span><span style="background:#6B8FA8"></span>
+</div>
+
+<footer>
+  <div class="footer-top">
+    <div class="footer-logo">Nuray Ortaç <span>Vitray</span></div>
+    <div class="footer-social">
+      <a href="https://www.instagram.com/vitraycamsanat_nurayortac" target="_blank">Instagram</a>
+      <a href="#iletisim">E-posta</a>
+      <a href="#iletisim">WhatsApp</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2025 Nuray Ortaç Vitray · İstanbul</div>
+    <nav class="footer-nav">
+      <a href="#hakkimda">Hakkımda</a>
+      <a href="#hizmetler">Hizmetler</a>
+      <a href="#galeri">Galeri</a>
+      <a href="#iletisim">İletişim</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cursor.style.left=mx+'px';cursor.style.top=my+'px';});
+  (function animRing(){rx+=(mx-rx)*0.12;ry+=(my-ry)*0.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(animRing);})();
+  window.addEventListener('scroll',()=>{document.getElementById('navbar').classList.toggle('scrolled',window.scrollY>50);});
+  function toggleMenu(){document.getElementById('navLinks').classList.toggle('open');}
+  const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');}),{threshold:0.1});
+  document.querySelectorAll('.reveal').forEach(r=>obs.observe(r));
+  document.querySelectorAll('.filter-btn').forEach(btn=>btn.addEventListener('click',function(){document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));this.classList.add('active');}));
+  document.getElementById('submitBtn').addEventListener('click',function(){this.textContent='Gönderildi ✓';this.style.background='#4A9B8E';setTimeout(()=>{this.textContent='Gönder';this.style.background='';},3000);});
+</script>
+</body>
+</html>
