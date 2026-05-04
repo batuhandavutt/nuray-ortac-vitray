@@ -1,1 +1,845 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin — Nuray Ortaç Vitray</title>
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&family=Cormorant+Garamond:ital,wght@0,300;1,300&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --gold: #C9A96E;
+      --gold-light: #E8D5B0;
+      --gold-dark: #8B6A35;
+      --ink: #1A1714;
+      --ink-soft: #2C2825;
+      --warm-white: #F9F6F0;
+      --warm-mid: #EDE8DF;
+      --danger: #C4788A;
+      --success: #4A9B8E;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Jost', sans-serif; background: #1A1714; color: var(--warm-white); min-height: 100vh; }
 
+    /* LOGIN */
+    #loginScreen {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--ink);
+    }
+    .login-box {
+      width: 380px;
+      padding: 48px;
+      border: 0.5px solid #2C2825;
+      background: #1E1B18;
+    }
+    .login-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      font-weight: 300;
+      color: var(--gold-light);
+      margin-bottom: 8px;
+      font-style: italic;
+    }
+    .login-sub {
+      font-size: 9px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: #555;
+      margin-bottom: 36px;
+    }
+    .login-box label {
+      font-size: 9px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: #666;
+      display: block;
+      margin-bottom: 8px;
+    }
+    .login-box input {
+      width: 100%;
+      background: #2C2825;
+      border: 0.5px solid #3C3630;
+      padding: 12px 14px;
+      font-family: 'Jost', sans-serif;
+      font-size: 14px;
+      font-weight: 300;
+      color: var(--warm-white);
+      outline: none;
+      margin-bottom: 20px;
+      transition: border-color 0.3s;
+    }
+    .login-box input:focus { border-color: var(--gold); }
+    .login-btn {
+      width: 100%;
+      padding: 14px;
+      background: var(--gold-dark);
+      color: var(--gold-light);
+      font-family: 'Jost', sans-serif;
+      font-size: 10px;
+      font-weight: 300;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      border: none;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .login-btn:hover { background: var(--gold); }
+    .login-error {
+      color: var(--danger);
+      font-size: 11px;
+      margin-top: 12px;
+      display: none;
+      text-align: center;
+    }
+
+    /* ADMIN PANEL */
+    #adminPanel { display: none; }
+    .admin-layout {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      min-height: 100vh;
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+      background: #111009;
+      border-right: 0.5px solid #2C2825;
+      padding: 32px 0;
+      position: fixed;
+      top: 0; left: 0; bottom: 0;
+      width: 240px;
+      display: flex;
+      flex-direction: column;
+    }
+    .sidebar-logo {
+      padding: 0 24px 28px;
+      border-bottom: 0.5px solid #2C2825;
+      margin-bottom: 20px;
+    }
+    .sidebar-logo-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 16px;
+      font-weight: 300;
+      color: var(--gold-light);
+      font-style: italic;
+    }
+    .sidebar-logo-tag {
+      font-size: 8px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: #444;
+      margin-top: 4px;
+    }
+    .sidebar-menu { flex: 1; }
+    .menu-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 24px;
+      font-size: 11px;
+      font-weight: 300;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #555;
+      cursor: pointer;
+      transition: all 0.2s;
+      border-left: 2px solid transparent;
+    }
+    .menu-item:hover { color: var(--gold-light); background: #1A1714; }
+    .menu-item.active { color: var(--gold); border-left-color: var(--gold); background: #1A1714; }
+    .menu-item svg { width: 14px; height: 14px; flex-shrink: 0; }
+    .sidebar-logout {
+      padding: 0 24px;
+      margin-top: auto;
+    }
+    .logout-btn {
+      width: 100%;
+      padding: 10px;
+      background: transparent;
+      border: 0.5px solid #2C2825;
+      color: #444;
+      font-family: 'Jost', sans-serif;
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .logout-btn:hover { border-color: var(--danger); color: var(--danger); }
+
+    /* MAIN */
+    .main-content {
+      margin-left: 240px;
+      padding: 40px;
+      min-height: 100vh;
+    }
+    .page-header {
+      margin-bottom: 36px;
+      padding-bottom: 24px;
+      border-bottom: 0.5px solid #2C2825;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .page-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px;
+      font-weight: 300;
+      color: var(--gold-light);
+      font-style: italic;
+    }
+    .page-sub {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #444;
+      margin-top: 4px;
+    }
+
+    /* TABS */
+    .tab-section { display: none; }
+    .tab-section.active { display: block; }
+
+    /* STATS */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+    .stat-card {
+      background: #1E1B18;
+      border: 0.5px solid #2C2825;
+      padding: 20px;
+    }
+    .stat-card-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 36px;
+      font-weight: 300;
+      color: var(--gold);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+    .stat-card-label {
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #444;
+    }
+
+    /* GALERI */
+    .gallery-upload-area {
+      border: 1px dashed #3C3630;
+      padding: 48px;
+      text-align: center;
+      margin-bottom: 32px;
+      transition: border-color 0.3s;
+      cursor: pointer;
+    }
+    .gallery-upload-area:hover { border-color: var(--gold); }
+    .gallery-upload-area.drag-over { border-color: var(--gold); background: #1E1B18; }
+    .upload-icon { margin-bottom: 16px; opacity: 0.4; }
+    .upload-text {
+      font-size: 13px;
+      font-weight: 300;
+      color: #666;
+      margin-bottom: 8px;
+    }
+    .upload-sub {
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #444;
+    }
+    #fileInput { display: none; }
+    .gallery-grid-admin {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+    .gallery-admin-item {
+      position: relative;
+      aspect-ratio: 1;
+      background: #1E1B18;
+      border: 0.5px solid #2C2825;
+      overflow: hidden;
+      group: true;
+    }
+    .gallery-admin-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .gallery-admin-item .item-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(26,23,20,0);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background 0.3s;
+    }
+    .gallery-admin-item:hover .item-overlay { background: rgba(26,23,20,0.75); }
+    .item-btn {
+      padding: 6px 12px;
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      border: none;
+      cursor: pointer;
+      opacity: 0;
+      transform: translateY(6px);
+      transition: opacity 0.3s, transform 0.3s;
+    }
+    .gallery-admin-item:hover .item-btn { opacity: 1; transform: translateY(0); }
+    .btn-delete { background: var(--danger); color: white; }
+    .item-label {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      background: rgba(26,23,20,0.7);
+      padding: 6px 8px;
+      font-size: 10px;
+      color: var(--gold-light);
+      text-align: center;
+    }
+
+    /* METIN EDITÖR */
+    .text-editor-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+    .editor-section {
+      background: #1E1B18;
+      border: 0.5px solid #2C2825;
+      padding: 24px;
+    }
+    .editor-label {
+      font-size: 9px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 0.5px solid #2C2825;
+    }
+    .editor-field {
+      margin-bottom: 16px;
+    }
+    .editor-field label {
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #555;
+      display: block;
+      margin-bottom: 6px;
+    }
+    .editor-field input,
+    .editor-field textarea {
+      width: 100%;
+      background: #111009;
+      border: 0.5px solid #3C3630;
+      padding: 10px 12px;
+      font-family: 'Jost', sans-serif;
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--warm-white);
+      outline: none;
+      transition: border-color 0.3s;
+    }
+    .editor-field input:focus,
+    .editor-field textarea:focus { border-color: var(--gold); }
+    .editor-field textarea { resize: vertical; min-height: 90px; }
+    .save-btn {
+      padding: 10px 24px;
+      background: var(--gold-dark);
+      color: var(--gold-light);
+      font-family: 'Jost', sans-serif;
+      font-size: 9px;
+      font-weight: 300;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      border: none;
+      cursor: pointer;
+      transition: background 0.3s;
+      margin-top: 8px;
+    }
+    .save-btn:hover { background: var(--gold); }
+    .save-btn.saved { background: var(--success); }
+
+    /* MESAJLAR */
+    .messages-list { display: flex; flex-direction: column; gap: 12px; }
+    .message-card {
+      background: #1E1B18;
+      border: 0.5px solid #2C2825;
+      padding: 20px 24px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 16px;
+      align-items: start;
+      border-left: 2px solid var(--gold-dark);
+    }
+    .message-card.unread { border-left-color: var(--gold); }
+    .msg-name {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--gold-light);
+      margin-bottom: 4px;
+    }
+    .msg-meta {
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      color: #444;
+      margin-bottom: 10px;
+    }
+    .msg-konu {
+      display: inline-block;
+      padding: 2px 10px;
+      background: #2C2825;
+      font-size: 9px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 10px;
+    }
+    .msg-text {
+      font-size: 13px;
+      font-weight: 300;
+      color: #888;
+      line-height: 1.6;
+    }
+    .msg-actions { display: flex; flex-direction: column; gap: 8px; }
+    .msg-btn {
+      padding: 6px 14px;
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      border: 0.5px solid;
+      background: transparent;
+      cursor: pointer;
+      font-family: 'Jost', sans-serif;
+      transition: all 0.2s;
+    }
+    .msg-btn.read { border-color: #3C3630; color: #555; }
+    .msg-btn.read:hover { border-color: var(--gold); color: var(--gold); }
+    .msg-btn.del { border-color: #3C3630; color: #555; }
+    .msg-btn.del:hover { border-color: var(--danger); color: var(--danger); }
+
+    /* TOAST */
+    .toast {
+      position: fixed;
+      bottom: 32px;
+      right: 32px;
+      background: var(--success);
+      color: white;
+      padding: 12px 24px;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.3s;
+      pointer-events: none;
+      z-index: 999;
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="loginScreen">
+  <div class="login-box">
+    <div class="login-logo">Nuray Ortaç Vitray</div>
+    <div class="login-sub">Yönetim Paneli</div>
+    <label>Kullanıcı Adı</label>
+    <input type="text" id="username" placeholder="admin"/>
+    <label>Şifre</label>
+    <input type="password" id="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')login()"/>
+    <button class="login-btn" onclick="login()">Giriş Yap</button>
+    <div class="login-error" id="loginError">Kullanıcı adı veya şifre hatalı.</div>
+  </div>
+</div>
+
+<!-- ADMIN PANEL -->
+<div id="adminPanel">
+  <div class="admin-layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <div class="sidebar-logo-name">Nuray Ortaç</div>
+        <div class="sidebar-logo-tag">Admin Paneli</div>
+      </div>
+      <nav class="sidebar-menu">
+        <div class="menu-item active" onclick="showTab('dashboard')">
+          <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1">
+            <rect x="1" y="1" width="5" height="5"/><rect x="8" y="1" width="5" height="5"/>
+            <rect x="1" y="8" width="5" height="5"/><rect x="8" y="8" width="5" height="5"/>
+          </svg>
+          Genel Bakış
+        </div>
+        <div class="menu-item" onclick="showTab('galeri')">
+          <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1">
+            <rect x="1" y="1" width="12" height="9" rx="1"/>
+            <path d="M1,7 L4,4 L7,7 L10,5 L13,7"/>
+            <circle cx="4" cy="4" r="1" fill="currentColor"/>
+          </svg>
+          Galeri
+        </div>
+        <div class="menu-item" onclick="showTab('metinler')">
+          <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1">
+            <path d="M2,3 L12,3 M2,6 L12,6 M2,9 L8,9"/>
+          </svg>
+          Metinler
+        </div>
+        <div class="menu-item" onclick="showTab('mesajlar')">
+          <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1">
+            <rect x="1" y="2" width="12" height="9" rx="1"/>
+            <path d="M1,4 L7,8 L13,4"/>
+          </svg>
+          Mesajlar
+          <span id="msgBadge" style="margin-left:auto;background:var(--gold);color:var(--ink);font-size:9px;padding:1px 6px;border-radius:10px;">3</span>
+        </div>
+        <div class="menu-item" onclick="window.open('https://dainty-baklava-06e300.netlify.app','_blank')">
+          <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1">
+            <path d="M6,2 L2,2 L2,12 L12,12 L12,8 M8,2 L12,2 L12,6 M12,2 L6,8"/>
+          </svg>
+          Siteyi Gör
+        </div>
+      </nav>
+      <div class="sidebar-logout">
+        <button class="logout-btn" onclick="logout()">Çıkış Yap</button>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main-content">
+
+      <!-- DASHBOARD -->
+      <div class="tab-section active" id="tab-dashboard">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Genel Bakış</div>
+            <div class="page-sub">Hoş geldiniz, Nuray Hanım</div>
+          </div>
+        </div>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-card-num" id="statGaleri">6</div>
+            <div class="stat-card-label">Galeri Eseri</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-num">3</div>
+            <div class="stat-card-label">Yeni Mesaj</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-num">12+</div>
+            <div class="stat-card-label">Yıl Deneyim</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-num">500+</div>
+            <div class="stat-card-label">Mezun Öğrenci</div>
+          </div>
+        </div>
+        <div style="background:#1E1B18;border:0.5px solid #2C2825;padding:24px;">
+          <div style="font-size:9px;letter-spacing:0.25em;text-transform:uppercase;color:var(--gold);margin-bottom:16px;">Hızlı İşlemler</div>
+          <div style="display:flex;gap:12px;flex-wrap:wrap;">
+            <button class="save-btn" onclick="showTab('galeri')">Galeri Yönet</button>
+            <button class="save-btn" onclick="showTab('mesajlar')">Mesajları Gör</button>
+            <button class="save-btn" onclick="showTab('metinler')">Metinleri Düzenle</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- GALERİ -->
+      <div class="tab-section" id="tab-galeri">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Galeri Yönetimi</div>
+            <div class="page-sub">Fotoğraf ekle, sırala veya sil</div>
+          </div>
+          <button class="save-btn" onclick="document.getElementById('fileInput').click()">+ Fotoğraf Ekle</button>
+        </div>
+        <div class="gallery-upload-area" id="uploadArea" onclick="document.getElementById('fileInput').click()">
+          <div class="upload-icon">
+            <svg width="40" height="40" viewBox="0 0 40 40" fill="none" stroke="#C9A96E" stroke-width="1">
+              <path d="M20,8 L20,28 M12,16 L20,8 L28,16"/>
+              <path d="M8,28 L8,34 L32,34 L32,28"/>
+            </svg>
+          </div>
+          <div class="upload-text">Fotoğrafları buraya sürükleyin veya tıklayın</div>
+          <div class="upload-sub">JPG, PNG — Maksimum 5MB</div>
+        </div>
+        <input type="file" id="fileInput" multiple accept="image/*" onchange="handleFiles(this.files)"/>
+        <div class="gallery-grid-admin" id="galleryGrid">
+          <!-- Demo items -->
+          <div class="gallery-admin-item" id="demo1">
+            <div style="width:100%;height:100%;background:linear-gradient(135deg,#6B8FA840,#C9A96E40);display:flex;align-items:center;justify-content:center;">
+              <svg width="40" height="40" viewBox="0 0 40 40" fill="none"><polygon points="20,2 38,12 38,28 20,38 2,28 2,12" stroke="#C9A96E" stroke-width="1"/><circle cx="20" cy="20" r="6" fill="#C9A96E" opacity="0.4"/></svg>
+            </div>
+            <div class="item-overlay">
+              <button class="item-btn btn-delete" onclick="deleteItem('demo1')">Sil</button>
+            </div>
+            <div class="item-label">Rozet, 2024</div>
+          </div>
+          <div class="gallery-admin-item" id="demo2">
+            <div style="width:100%;height:100%;background:linear-gradient(135deg,#4A9B8E40,#C4788A40);display:flex;align-items:center;justify-content:center;">
+              <svg width="40" height="40" viewBox="0 0 40 40" fill="none"><rect x="4" y="4" width="32" height="32" stroke="#C9A96E" stroke-width="1"/><line x1="20" y1="4" x2="20" y2="36" stroke="#C9A96E" stroke-width="0.5"/><line x1="4" y1="20" x2="36" y2="20" stroke="#C9A96E" stroke-width="0.5"/></svg>
+            </div>
+            <div class="item-overlay">
+              <button class="item-btn btn-delete" onclick="deleteItem('demo2')">Sil</button>
+            </div>
+            <div class="item-label">Panel, 2023</div>
+          </div>
+          <div class="gallery-admin-item" id="demo3">
+            <div style="width:100%;height:100%;background:linear-gradient(135deg,#C4788A40,#6B8FA840);display:flex;align-items:center;justify-content:center;">
+              <svg width="40" height="40" viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="16" stroke="#C9A96E" stroke-width="1"/><circle cx="20" cy="20" r="8" stroke="#6B8FA8" stroke-width="1"/><circle cx="20" cy="20" r="3" fill="#C9A96E" opacity="0.6"/></svg>
+            </div>
+            <div class="item-overlay">
+              <button class="item-btn btn-delete" onclick="deleteItem('demo3')">Sil</button>
+            </div>
+            <div class="item-label">Rozet Seri, 2024</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- METİNLER -->
+      <div class="tab-section" id="tab-metinler">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Metin Düzenleyici</div>
+            <div class="page-sub">Site içeriklerini güncelle</div>
+          </div>
+        </div>
+        <div class="text-editor-grid">
+          <div class="editor-section">
+            <div class="editor-label">Hero Bölümü</div>
+            <div class="editor-field">
+              <label>Ana Başlık</label>
+              <input type="text" value="Işığı cam üzerinde yakalıyorum." id="heroTitle"/>
+            </div>
+            <div class="editor-field">
+              <label>Alt Başlık</label>
+              <input type="text" value="El Yapımı Vitray · Atölye Dersleri · Kurumsal Tasarım" id="heroSub"/>
+            </div>
+            <div class="editor-field">
+              <label>Açıklama</label>
+              <textarea id="heroDesc">Renk, ışık ve geometrinin kesiştiği noktada; geleneksel vitray sanatını çağdaş bir anlatımla yorumluyorum.</textarea>
+            </div>
+            <button class="save-btn" onclick="saveSection('hero')">Kaydet</button>
+          </div>
+          <div class="editor-section">
+            <div class="editor-label">Hakkımda Bölümü</div>
+            <div class="editor-field">
+              <label>Başlık</label>
+              <input type="text" value="Camın içinde bir dünya var." id="aboutTitle"/>
+            </div>
+            <div class="editor-field">
+              <label>Paragraf 1</label>
+              <textarea id="aboutP1">Vitray sanatıyla tanışmam bir tesadüf değildi. Işığın renkli cam parçalarından geçerken yarattığı o büyülü dönüşüm, beni yıllar önce bu sanata bağladı.</textarea>
+            </div>
+            <div class="editor-field">
+              <label>Paragraf 2</label>
+              <textarea id="aboutP2">İstanbul'daki atölyemde hem kendi eserlerimi üretiyorum hem de bu sanatı öğrenmek isteyen herkese kapılarımı açıyorum.</textarea>
+            </div>
+            <button class="save-btn" onclick="saveSection('about')">Kaydet</button>
+          </div>
+          <div class="editor-section">
+            <div class="editor-label">İletişim Bilgileri</div>
+            <div class="editor-field">
+              <label>E-posta</label>
+              <input type="text" value="info@vitraycamsanat.com" id="contactEmail"/>
+            </div>
+            <div class="editor-field">
+              <label>WhatsApp</label>
+              <input type="text" value="+90 5XX XXX XX XX" id="contactPhone"/>
+            </div>
+            <div class="editor-field">
+              <label>Instagram</label>
+              <input type="text" value="@vitraycamsanat_nurayortac" id="contactInsta"/>
+            </div>
+            <button class="save-btn" onclick="saveSection('contact')">Kaydet</button>
+          </div>
+          <div class="editor-section">
+            <div class="editor-label">İstatistikler</div>
+            <div class="editor-field">
+              <label>Yıllık Deneyim</label>
+              <input type="text" value="12+" id="stat1"/>
+            </div>
+            <div class="editor-field">
+              <label>Tamamlanan Eser</label>
+              <input type="text" value="300+" id="stat2"/>
+            </div>
+            <div class="editor-field">
+              <label>Mezun Öğrenci</label>
+              <input type="text" value="500+" id="stat3"/>
+            </div>
+            <button class="save-btn" onclick="saveSection('stats')">Kaydet</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- MESAJLAR -->
+      <div class="tab-section" id="tab-mesajlar">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Gelen Mesajlar</div>
+            <div class="page-sub">İletişim formundan gelen talepler</div>
+          </div>
+        </div>
+        <div class="messages-list" id="messagesList">
+          <div class="message-card unread" id="msg1">
+            <div>
+              <div class="msg-name">Ayşe Kaya</div>
+              <div class="msg-meta">4 Mayıs 2025, 21:30 · ayse@gmail.com</div>
+              <div class="msg-konu">Birebir Ders</div>
+              <div class="msg-text">Merhaba, vitray derslerinize katılmak istiyorum. Hafta sonları müsait oluyorum, uygun bir program var mı?</div>
+            </div>
+            <div class="msg-actions">
+              <button class="msg-btn read" onclick="markRead('msg1')">Okundu</button>
+              <button class="msg-btn del" onclick="deleteMsg('msg1')">Sil</button>
+            </div>
+          </div>
+          <div class="message-card unread" id="msg2">
+            <div>
+              <div class="msg-name">Mehmet Demir</div>
+              <div class="msg-meta">3 Mayıs 2025, 14:15 · mdemir@firma.com</div>
+              <div class="msg-konu">Kurumsal Proje</div>
+              <div class="msg-text">Restoranımız için özel vitray panel yaptırmak istiyoruz. Yaklaşık 3x2 metre boyutlarında bir çalışma. Fiyat teklifi alabilir miyiz?</div>
+            </div>
+            <div class="msg-actions">
+              <button class="msg-btn read" onclick="markRead('msg2')">Okundu</button>
+              <button class="msg-btn del" onclick="deleteMsg('msg2')">Sil</button>
+            </div>
+          </div>
+          <div class="message-card unread" id="msg3">
+            <div>
+              <div class="msg-name">Zeynep Arslan</div>
+              <div class="msg-meta">2 Mayıs 2025, 09:45 · zeynep.arslan@hotmail.com</div>
+              <div class="msg-konu">Özel Sipariş</div>
+              <div class="msg-text">Annem için doğum günü hediyesi olarak küçük bir vitray pencere yaptırmak istiyorum. Ne kadar sürer ve fiyatı nedir?</div>
+            </div>
+            <div class="msg-actions">
+              <button class="msg-btn read" onclick="markRead('msg3')">Okundu</button>
+              <button class="msg-btn del" onclick="deleteMsg('msg3')">Sil</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  const ADMIN_USER = 'nuray';
+  const ADMIN_PASS = 'vitray2025';
+
+  function login() {
+    const u = document.getElementById('username').value;
+    const p = document.getElementById('password').value;
+    if (u === ADMIN_USER && p === ADMIN_PASS) {
+      document.getElementById('loginScreen').style.display = 'none';
+      document.getElementById('adminPanel').style.display = 'block';
+    } else {
+      document.getElementById('loginError').style.display = 'block';
+    }
+  }
+
+  function logout() {
+    document.getElementById('adminPanel').style.display = 'none';
+    document.getElementById('loginScreen').style.display = 'flex';
+    document.getElementById('username').value = '';
+    document.getElementById('password').value = '';
+  }
+
+  function showTab(tab) {
+    document.querySelectorAll('.tab-section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
+    document.getElementById('tab-' + tab).classList.add('active');
+    event.currentTarget.classList.add('active');
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3000);
+  }
+
+  function saveSection(section) {
+    const btn = event.currentTarget;
+    btn.textContent = 'Kaydedildi ✓';
+    btn.classList.add('saved');
+    showToast('Değişiklikler kaydedildi');
+    setTimeout(() => { btn.textContent = 'Kaydet'; btn.classList.remove('saved'); }, 3000);
+  }
+
+  function handleFiles(files) {
+    Array.from(files).forEach(file => {
+      const reader = new FileReader();
+      reader.onload = e => {
+        const id = 'img_' + Date.now() + Math.random().toString(36).substr(2,5);
+        const div = document.createElement('div');
+        div.className = 'gallery-admin-item';
+        div.id = id;
+        div.innerHTML = `
+          <img src="${e.target.result}" alt="${file.name}"/>
+          <div class="item-overlay">
+            <button class="item-btn btn-delete" onclick="deleteItem('${id}')">Sil</button>
+          </div>
+          <div class="item-label">${file.name.replace(/\.[^.]+$/, '')}</div>
+        `;
+        document.getElementById('galleryGrid').appendChild(div);
+        updateGalleryCount();
+        showToast('Fotoğraf eklendi');
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  function deleteItem(id) {
+    if (confirm('Bu fotoğrafı silmek istediğinizden emin misiniz?')) {
+      document.getElementById(id).remove();
+      updateGalleryCount();
+      showToast('Fotoğraf silindi');
+    }
+  }
+
+  function updateGalleryCount() {
+    document.getElementById('statGaleri').textContent = document.getElementById('galleryGrid').children.length;
+  }
+
+  function markRead(id) {
+    document.getElementById(id).classList.remove('unread');
+    const unread = document.querySelectorAll('.message-card.unread').length;
+    document.getElementById('msgBadge').textContent = unread;
+    if (unread === 0) document.getElementById('msgBadge').style.display = 'none';
+    showToast('Mesaj okundu olarak işaretlendi');
+  }
+
+  function deleteMsg(id) {
+    if (confirm('Bu mesajı silmek istediğinizden emin misiniz?')) {
+      document.getElementById(id).remove();
+      showToast('Mesaj silindi');
+    }
+  }
+
+  // Drag & drop
+  const uploadArea = document.getElementById('uploadArea');
+  uploadArea.addEventListener('dragover', e => { e.preventDefault(); uploadArea.classList.add('drag-over'); });
+  uploadArea.addEventListener('dragleave', () => uploadArea.classList.remove('drag-over'));
+  uploadArea.addEventListener('drop', e => {
+    e.preventDefault();
+    uploadArea.classList.remove('drag-over');
+    handleFiles(e.dataTransfer.files);
+  });
+</script>
+</body>
+</html>
